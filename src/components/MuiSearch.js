@@ -5,6 +5,8 @@ import { tempt } from "./helper";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Temp from "./Temp";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MuiSearch = () => {
   const [sendValue, setSendValue] = useState();
@@ -17,18 +19,27 @@ const MuiSearch = () => {
   };
 
   useEffect(() => {
-    tempt(sendValue).then((data) => {
-      if (data.cod === "400") {
-        console.log(data.cod);
-        setFatch(false);
-      } else {
-        setFatch(false);
-        setValues(data);
-      }
-    });
-  }, [fatch]);
+    if (fatch) {
+      tempt(sendValue).then((data) => {
+        if (data.message) {
+          toast.error(`${data.message}`, { theme: "dark", autoClose: 1000 });
+          setFatch(false);
+        } else {
+          toast.success(`I found this result`, {
+            theme: "dark",
+            autoClose: 1000,
+          });
+          setFatch(false);
+          setValues(data);
+        }
+      });
+    }
+    return;
+  });
+
   return (
     <>
+      <ToastContainer />
       <Stack mt={6} alignItems={"center"} sx={{ padding: "2rem" }}>
         <form onSubmit={isClick}>
           <TextField

@@ -29,8 +29,8 @@ const MuiSearch = () => {
             theme: "dark",
             autoClose: 1000,
           });
-          setFatch(false);
           setValues(data);
+          setFatch(false);
         }
       });
     }
